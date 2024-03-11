@@ -43,21 +43,31 @@ int main()
 
     //running exercise 3
 
+    //auto start = std::chrono::high_resolution_clock::now();
+
+    //exercise3();
+   
+
+    //auto stop = std::chrono::high_resolution_clock::now();
+
+    //auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+
+    //std::cout << duration.count() << std::endl;
+    
+
+
+    //running some test
     auto start = std::chrono::high_resolution_clock::now();
 
-    exercise3();
-   
+    exercise4();
+
 
     auto stop = std::chrono::high_resolution_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
 
     std::cout << duration.count() << std::endl;
-    
 
-
-    //running some test
-    //test();
 
 }
 

@@ -215,7 +215,6 @@ void exercise3() {
 	double rho = N / (L * L);
 	bool orientation = true;
 	double t_end = 1;
-	//double Pe = 20;
 	double d_max = 2.5;
 	double r2_cut = 2.5 * 2.5;
 
@@ -238,7 +237,7 @@ void exercise4() {
 	double L = 85;
 	double rho = N / (L * L);
 	bool orientation = true;
-	double t_end = 1;
+	double t_end = 100;
 	double d_max = 2.5;
 	double r2_cut = 2.5 * 2.5;
 

@@ -353,7 +353,8 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 	y_displacement = null;
 	phi_displacement = null;
 
-	std::minstd_rand gen(76);
+	int seed = 76;
+	std::minstd_rand gen(seed);
 	std::normal_distribution<double> dist(0, 1);
 
 	const int n = floor(L / d_max);
@@ -395,8 +396,9 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 			msd_value += x_displacement[i] * x_displacement[i] + y_displacement[i] * y_displacement[i];
 			msad_value += phi_displacement[i] * phi_displacement[i];
 		}
-		if ( (t) % 10000 == 0) {
-			off_snap << (t)*delta_t << " ";
+		double t_off = t * delta_t;
+		if (t_off == 0.01 or t_off == 0.1 or t_off == 1 or t_off == 10 or t_off == 100) {
+			off_snap << t_off << " ";
 			for (int i = 0; i < N; i++) {
 				off_snap << x_list[i] << " " << y_list[i] << " " << phi_list[i] << " ";
 			}
@@ -405,7 +407,7 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 
 		// here output the msd
 		if (t % 1000 == 0) {
-			off_msd << t * delta_t << " " << msd_value / N << " " << msad_value / N << "\n";
+			off_msd << t_off << " " << msd_value / N << " " << msad_value / N << "\n";
 		}	
 	}
 }
