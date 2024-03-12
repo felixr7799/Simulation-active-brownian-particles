@@ -290,17 +290,17 @@ std::vector<std::pair<double, double>> cell_force(std::vector<double>& x_values,
 	cell_map.reserve(n * n);
 
 	for (int i = 0; i < N; i++) {
-		uint16_t cell_x = floor(x_values[i] / cell_length);
-		uint16_t cell_y = floor(y_values[i] / cell_length);
+		int cell_x = floor(x_values[i] / cell_length);
+		int cell_y = floor(y_values[i] / cell_length);
 
-		uint16_t cell_label = cell_x + cell_y * n; //finding cell label of the particle
+		int cell_label = cell_x + cell_y * n; //finding cell label of the particle
 
 		if (i == 0) {
 			cell_map[cell_label].push_back(i); // first particle so dont need to check for pairs
 		}
 		else { //if not first particle checking neighboring cells for pairs
-			for (uint16_t neighbor_label : map_neighbors[cell_label]){
-				for (uint16_t p2 : cell_map[neighbor_label]) { //checking each particle in neighbor cell
+			for (int neighbor_label : map_neighbors[cell_label]){
+				for (int p2 : cell_map[neighbor_label]) { //checking each particle in neighbor cell
 						
 					double* distance = min_image_distance(x_values[i], y_values[i], x_values[p2], y_values[p2], L); //distance
 					
@@ -308,7 +308,7 @@ std::vector<std::pair<double, double>> cell_force(std::vector<double>& x_values,
 					double dy = distance[1];
 					double d2 = dx * dx + dy * dy;
 					if (d2 < d2_max) { //if distance small enough add to the force
-						f = 1 / (d2 * d2 * d2 * d2 * d2 * d2 * d2) - 0.5 / (d2 * d2 * d2 * d2);
+						f = 48 / (d2 * d2 * d2 * d2 * d2 * d2 * d2) - 24 / (d2 * d2 * d2 * d2);
 						force[i].first += f * dx;
 						force[i].second += f * dy;
 						force[p2].first -= f * dx;
@@ -382,8 +382,8 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 			chi = dist(gen);
 
 			d_phi = q * sqrt(2 * delta_t) * chi;
-			d_x = pe * cos(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_x + delta_t * delta_t * f[i].first;
-			d_y = pe * sin(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_y + delta_t * delta_t * f[i].second;
+			d_x = pe * cos(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_x + delta_t  * f[i].first;
+			d_y = pe * sin(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_y + delta_t * f[i].second;
 
 			phi_list[i] = positive_mod(phi_list[i] + d_phi, 2 * pi);
 			x_list[i] = positive_mod(x_list[i] + d_x, L);
@@ -397,7 +397,7 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 			msad_value += phi_displacement[i] * phi_displacement[i];
 		}
 		double t_off = t * delta_t;
-		if (t_off == 0.01 or t_off == 0.1 or t_off == 1 or t_off == 10 or t_off == 100) {
+		if (t_off == 0.01 or t_off == 0.1 or t_off == 1 or t % 500000 ==0 ) {
 			off_snap << t_off << " ";
 			for (int i = 0; i < N; i++) {
 				off_snap << x_list[i] << " " << y_list[i] << " " << phi_list[i] << " ";

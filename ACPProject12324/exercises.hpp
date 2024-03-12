@@ -238,21 +238,21 @@ void exercise4() {
 	double rho = N / (L * L);
 	bool orientation = true;
 	double t_end = 100;
-	double d_max = 2.5;
-	double r2_cut = 2.5 * 2.5;
+	double d_max = 2.5; 
+	double d2_max = d_max*d_max;
 
-	double Pe[4] = { 0,20 ,50 ,80 };
+	double Pe[6] = { 0,20,50,80 ,130,180 };
 
-	int iterator[4] = { 0,1,2,3 };
+	int iterator[6] = { 0,1,2,3 ,4,5};
 
 
-	const char* paths[4] = { "ex4_msd_0.dat" , "ex4_msd_20.dat", "ex4_msd_50.dat" , "ex4_msd_80.dat" };
-	const char* snapshots[4] = { "ex4_snap_0.dat", "ex4_snap_20.dat", "ex4_snap_50.dat" ,"ex4_snap_80.dat" };
+	const char* paths[6] = { "ex4_msd_0.dat" , "ex4_msd_20.dat", "ex4_msd_50.dat" , "ex4_msd_80.dat","ex4_msd_130.dat","ex4_msd_180.dat" };
+	const char* snapshots[6] = { "ex4_snap_0.dat", "ex4_snap_20.dat", "ex4_snap_50.dat" ,"ex4_snap_80.dat","ex4_snap_130.dat","ex4_snap_180.dat" };
 
 	std::vector<std::vector<double>> grid = init_uniform_grid(N, rho, orientation);
 
-	std::for_each(std::execution::par, std::begin(iterator), std::end(iterator), [grid, L, t_end, d_max, r2_cut, paths, Pe,snapshots](int i) {
+	std::for_each(std::execution::par, std::begin(iterator), std::end(iterator), [grid, L, t_end, d_max, d2_max, paths, Pe,snapshots](int i) {
 
-		integrator_interactions(grid[0], grid[1], grid[2], L, t_end, Pe[i], d_max, r2_cut, paths[i], snapshots[i]);
+		integrator_interactions(grid[0], grid[1], grid[2], L, t_end, Pe[i], d_max, d2_max, paths[i], snapshots[i]);
 		});
 }
