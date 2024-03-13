@@ -85,7 +85,7 @@ void exercise1c() {
 
 	std::vector<std::pair<int, int>> pairs_naive = neighbors_naive(x_y_values[0], x_y_values[1], d_max);
 
-	std::vector<std::pair<int, int>> pairs_cell = cell_list_algo(x_y_values[0], x_y_values[1],d_max*d_max,N,L,n,cell_length);
+	std::vector<std::pair<int, int>> pairs_cell = cell_list_algo(x_y_values[0], x_y_values[1],d_max*d_max,L,N,n,cell_length);
 
 	for (int i = 0; i < x_y_values[0].size(); i++) {
 		ex1c_grid << x_y_values[0][i] << " " << x_y_values[1][i] << std::endl;
@@ -212,7 +212,7 @@ void exercise3() {
 	double L = 85;
 	double rho = N / (L * L);
 	bool orientation = true;
-	double t_end = 1;
+	double t_end = 100;
 	double d_max = 2.5;
 	double r2_cut = 2.5 * 2.5;
 

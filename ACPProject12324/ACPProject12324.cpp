@@ -15,19 +15,19 @@
 int main()
 {
     //running exercise 1 a)
-    exercise1a();
+    //exercise1a();
 
     //running exercise 1 b)
-    exercise1b();
+    //exercise1b();
 
     //running exercise 1 c) with part of 1 e) (comparing cell list and naive algo on the random grid)
-    exercise1c();
+    //exercise1c();
 
     //running exercise 1e) (the part that compares the cell algo to naive for 25x25 grid)
-    exercise1e();
+    //exercise1e();
 
     //running exercise 1 f) benchmarking the two algorithms
-    exercise1f();
+    //exercise1f();
 
     //running exercise 2
 
