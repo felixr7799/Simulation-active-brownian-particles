@@ -178,8 +178,6 @@ void exercise1f() {
 		auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(stop1 - start1);
 
 		ex1f_runtime_output << i << " " << duration.count() << " " << duration1.count() << "\n";	
-
-		std::cout << pairs_naive.size() << " " << pairs_cell.size() << "\n";
 	}
 }
 

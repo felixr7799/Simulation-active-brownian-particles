@@ -39,15 +39,15 @@ double* min_image_distance(double x1, double y1, double x2, double y2, const dou
 //function to create initial configurations
 std::vector<std::vector<double>> init_uniform_random_grid(const int N, const double rho, bool orientation) {
 
+	int seed = 76;
+	std::minstd_rand gen(seed);
+
 	std::vector<std::vector<double>> grid(2);
 	std::vector<double> null(N);
 	std::fill(null.begin(), null.end(), 0);
 	std::fill(grid.begin(), grid.end(), null);
 
 	double side_length = sqrt(N / rho);
-
-	std::random_device rd;
-	std::mt19937 gen(rd());
 	std::uniform_real_distribution<double> dist(0, side_length);
 
 	if (orientation) {
@@ -212,7 +212,9 @@ void langevin_integrator(const std::vector<double>& x_values, const std::vector<
 	double dphi;
 	double msd_value = 0;
 	double msad_value = 0;
-	std::minstd_rand gen(76);
+
+	int seed = 76;
+	std::minstd_rand gen(seed);
 	std::normal_distribution<double> dist(0, 1);
 
 	for (int t = 0; t * delta_t < t_end; t++) {
@@ -326,6 +328,10 @@ std::vector<std::pair<double, double>> cell_force(std::vector<double>& x_values,
 
 void integrator_interactions(const std::vector<double>& x_values, const std::vector<double>& y_values, const std::vector<double>& phi_values, const double L, const double t_end, const double pe, const double d_max, double d2_max, const char* path_msd,const char* snapshots) {
 
+	int seed = 76;
+	std::minstd_rand gen(seed);
+	std::normal_distribution<double> dist(0, 1);
+	
 	std::ofstream off_msd(path_msd);
 	std::ofstream off_snap(snapshots);
 
@@ -353,10 +359,7 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 	y_displacement = null;
 	phi_displacement = null;
 
-	int seed = 76;
-	std::minstd_rand gen(seed);
-	std::normal_distribution<double> dist(0, 1);
-
+	
 	const int n = floor(L / d_max);
 	double cell_length = L / n;
 	std::unordered_map<int, std::array<int, 9>> map_neighbors = cell_neighbors_periodic(n);

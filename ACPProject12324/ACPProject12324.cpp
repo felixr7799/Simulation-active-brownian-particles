@@ -15,59 +15,33 @@
 int main()
 {
     //running exercise 1 a)
-    //exercise1a();
+    exercise1a();
 
     //running exercise 1 b)
-    //exercise1b();
+    exercise1b();
 
     //running exercise 1 c) with part of 1 e) (comparing cell list and naive algo on the random grid)
-    //exercise1c();
+    exercise1c();
 
     //running exercise 1e) (the part that compares the cell algo to naive for 25x25 grid)
-    //exercise1e();
+    exercise1e();
 
     //running exercise 1 f) benchmarking the two algorithms
-    //exercise1f();
+    exercise1f();
 
     //running exercise 2
-    //auto start = std::chrono::high_resolution_clock::now();
 
     //exercise2();
-
-    //auto stop = std::chrono::high_resolution_clock::now();
-
-    //auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-
-    //std::cout << duration.count() << "\n";
 
 
     //running exercise 3
 
-    //auto start = std::chrono::high_resolution_clock::now();
-
     //exercise3();
-   
-
-    //auto stop = std::chrono::high_resolution_clock::now();
-
-    //auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
-
-    //std::cout << duration.count() << std::endl;
-    
 
 
-    //running some test
-    auto start = std::chrono::high_resolution_clock::now();
+    //running exercise 4
 
-    exercise4();
-
-
-    auto stop = std::chrono::high_resolution_clock::now();
-
-    auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
-
-    std::cout << duration.count() << std::endl;
-
+   //exercise4();
 
 }
 
