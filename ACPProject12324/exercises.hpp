@@ -213,8 +213,8 @@ void exercise3() {
 	double rho = N / (L * L);
 	bool orientation = true;
 	double t_end = 100;
-	double d_max = 2.5;
-	double r2_cut = 2.5 * 2.5;
+	double d_max = 1;
+	double r2_cut = d_max*d_max;
 
 	double Pe[2] = { 0,20 };
 	int iterator[2] = { 0,1 };
@@ -236,7 +236,7 @@ void exercise4() {
 	double rho = N / (L * L);
 	bool orientation = true;
 	double t_end = 100;
-	double d_max = 2.5; 
+	double d_max = 1; 
 	double d2_max = d_max*d_max;
 
 	double Pe[6] = { 0,20,50,80 ,130,180 };

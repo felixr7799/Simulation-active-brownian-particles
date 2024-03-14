@@ -409,7 +409,7 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 		}
 
 		// here output the msd
-		if (t % 1000 == 0) {
+		if (t % 1 == 0) {
 			off_msd << t_off << " " << msd_value / N << " " << msad_value / N << "\n";
 		}	
 	}
