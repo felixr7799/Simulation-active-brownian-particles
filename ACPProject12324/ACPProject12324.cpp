@@ -30,34 +30,18 @@ int main()
     //exercise1f();
 
     //running exercise 2
-    //auto start = std::chrono::high_resolution_clock::now();
 
     //exercise2();
-
-    //auto stop = std::chrono::high_resolution_clock::now();
-
-    //auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-
-    //std::cout << duration.count() << "\n";
 
 
     //running exercise 3
 
-    auto start = std::chrono::high_resolution_clock::now();
-
-    exercise3();
-   
-
-    auto stop = std::chrono::high_resolution_clock::now();
-
-    auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
-
-    std::cout << duration.count() << std::endl;
-    
+    //exercise3();
 
 
-    //running some test
-    //test();
+    //running exercise 4
+
+   //exercise4();
 
 }
 

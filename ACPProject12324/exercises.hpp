@@ -85,7 +85,7 @@ void exercise1c() {
 
 	std::vector<std::pair<int, int>> pairs_naive = neighbors_naive(x_y_values[0], x_y_values[1], d_max);
 
-	std::vector<std::pair<int, int>> pairs_cell = cell_list_algo(x_y_values[0], x_y_values[1],d_max*d_max,N,L,n,cell_length);
+	std::vector<std::pair<int, int>> pairs_cell = cell_list_algo(x_y_values[0], x_y_values[1],d_max*d_max,L,N,n,cell_length);
 
 	for (int i = 0; i < x_y_values[0].size(); i++) {
 		ex1c_grid << x_y_values[0][i] << " " << x_y_values[1][i] << std::endl;
@@ -178,8 +178,6 @@ void exercise1f() {
 		auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(stop1 - start1);
 
 		ex1f_runtime_output << i << " " << duration.count() << " " << duration1.count() << "\n";	
-
-		std::cout << pairs_naive.size() << " " << pairs_cell.size() << "\n";
 	}
 }
 
@@ -214,10 +212,9 @@ void exercise3() {
 	double L = 85;
 	double rho = N / (L * L);
 	bool orientation = true;
-	double t_end = 1;
-	//double Pe = 20;
-	double d_max = 2.5;
-	double r2_cut = 2.5 * 2.5;
+	double t_end = 100;
+	double d_max = 1;
+	double r2_cut = d_max*d_max;
 
 	double Pe[2] = { 0,20 };
 	int iterator[2] = { 0,1 };
@@ -238,22 +235,22 @@ void exercise4() {
 	double L = 85;
 	double rho = N / (L * L);
 	bool orientation = true;
-	double t_end = 1;
-	double d_max = 2.5;
-	double r2_cut = 2.5 * 2.5;
+	double t_end = 100;
+	double d_max = 1; 
+	double d2_max = d_max*d_max;
 
-	double Pe[4] = { 0,20 ,50 ,80 };
+	double Pe[6] = { 0,20,50,80 ,130,180 };
 
-	int iterator[4] = { 0,1,2,3 };
+	int iterator[6] = { 0,1,2,3 ,4,5};
 
 
-	const char* paths[4] = { "ex4_msd_0.dat" , "ex4_msd_20.dat", "ex4_msd_50.dat" , "ex4_msd_80.dat" };
-	const char* snapshots[4] = { "ex4_snap_0.dat", "ex4_snap_20.dat", "ex4_snap_50.dat" ,"ex4_snap_80.dat" };
+	const char* paths[6] = { "ex4_msd_0.dat" , "ex4_msd_20.dat", "ex4_msd_50.dat" , "ex4_msd_80.dat","ex4_msd_130.dat","ex4_msd_180.dat" };
+	const char* snapshots[6] = { "ex4_snap_0.dat", "ex4_snap_20.dat", "ex4_snap_50.dat" ,"ex4_snap_80.dat","ex4_snap_130.dat","ex4_snap_180.dat" };
 
 	std::vector<std::vector<double>> grid = init_uniform_grid(N, rho, orientation);
 
-	std::for_each(std::execution::par, std::begin(iterator), std::end(iterator), [grid, L, t_end, d_max, r2_cut, paths, Pe,snapshots](int i) {
+	std::for_each(std::execution::par, std::begin(iterator), std::end(iterator), [grid, L, t_end, d_max, d2_max, paths, Pe,snapshots](int i) {
 
-		integrator_interactions(grid[0], grid[1], grid[2], L, t_end, Pe[i], d_max, r2_cut, paths[i], snapshots[i]);
+		integrator_interactions(grid[0], grid[1], grid[2], L, t_end, Pe[i], d_max, d2_max, paths[i], snapshots[i]);
 		});
 }

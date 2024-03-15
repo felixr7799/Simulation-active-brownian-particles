@@ -39,15 +39,15 @@ double* min_image_distance(double x1, double y1, double x2, double y2, const dou
 //function to create initial configurations
 std::vector<std::vector<double>> init_uniform_random_grid(const int N, const double rho, bool orientation) {
 
+	int seed = 76;
+	std::minstd_rand gen(seed);
+
 	std::vector<std::vector<double>> grid(2);
 	std::vector<double> null(N);
 	std::fill(null.begin(), null.end(), 0);
 	std::fill(grid.begin(), grid.end(), null);
 
 	double side_length = sqrt(N / rho);
-
-	std::random_device rd;
-	std::mt19937 gen(rd());
 	std::uniform_real_distribution<double> dist(0, side_length);
 
 	if (orientation) {
@@ -212,7 +212,9 @@ void langevin_integrator(const std::vector<double>& x_values, const std::vector<
 	double dphi;
 	double msd_value = 0;
 	double msad_value = 0;
-	std::minstd_rand gen(76);
+
+	int seed = 76;
+	std::minstd_rand gen(seed);
 	std::normal_distribution<double> dist(0, 1);
 
 	for (int t = 0; t * delta_t < t_end; t++) {
@@ -290,17 +292,17 @@ std::vector<std::pair<double, double>> cell_force(std::vector<double>& x_values,
 	cell_map.reserve(n * n);
 
 	for (int i = 0; i < N; i++) {
-		uint16_t cell_x = floor(x_values[i] / cell_length);
-		uint16_t cell_y = floor(y_values[i] / cell_length);
+		int cell_x = floor(x_values[i] / cell_length);
+		int cell_y = floor(y_values[i] / cell_length);
 
-		uint16_t cell_label = cell_x + cell_y * n; //finding cell label of the particle
+		int cell_label = cell_x + cell_y * n; //finding cell label of the particle
 
 		if (i == 0) {
 			cell_map[cell_label].push_back(i); // first particle so dont need to check for pairs
 		}
 		else { //if not first particle checking neighboring cells for pairs
-			for (uint16_t neighbor_label : map_neighbors[cell_label]){
-				for (uint16_t p2 : cell_map[neighbor_label]) { //checking each particle in neighbor cell
+			for (int neighbor_label : map_neighbors[cell_label]){
+				for (int p2 : cell_map[neighbor_label]) { //checking each particle in neighbor cell
 						
 					double* distance = min_image_distance(x_values[i], y_values[i], x_values[p2], y_values[p2], L); //distance
 					
@@ -308,7 +310,7 @@ std::vector<std::pair<double, double>> cell_force(std::vector<double>& x_values,
 					double dy = distance[1];
 					double d2 = dx * dx + dy * dy;
 					if (d2 < d2_max) { //if distance small enough add to the force
-						f = 1 / (d2 * d2 * d2 * d2 * d2 * d2 * d2) - 0.5 / (d2 * d2 * d2 * d2);
+						f = 48 / (d2 * d2 * d2 * d2 * d2 * d2 * d2) - 24 / (d2 * d2 * d2 * d2);
 						force[i].first += f * dx;
 						force[i].second += f * dy;
 						force[p2].first -= f * dx;
@@ -326,6 +328,10 @@ std::vector<std::pair<double, double>> cell_force(std::vector<double>& x_values,
 
 void integrator_interactions(const std::vector<double>& x_values, const std::vector<double>& y_values, const std::vector<double>& phi_values, const double L, const double t_end, const double pe, const double d_max, double d2_max, const char* path_msd,const char* snapshots) {
 
+	int seed = 76;
+	std::minstd_rand gen(seed);
+	std::normal_distribution<double> dist(0, 1);
+	
 	std::ofstream off_msd(path_msd);
 	std::ofstream off_snap(snapshots);
 
@@ -353,9 +359,7 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 	y_displacement = null;
 	phi_displacement = null;
 
-	std::minstd_rand gen(76);
-	std::normal_distribution<double> dist(0, 1);
-
+	
 	const int n = floor(L / d_max);
 	double cell_length = L / n;
 	std::unordered_map<int, std::array<int, 9>> map_neighbors = cell_neighbors_periodic(n);
@@ -381,8 +385,8 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 			chi = dist(gen);
 
 			d_phi = q * sqrt(2 * delta_t) * chi;
-			d_x = pe * cos(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_x + delta_t * delta_t * f[i].first;
-			d_y = pe * sin(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_y + delta_t * delta_t * f[i].second;
+			d_x = pe * cos(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_x + delta_t  * f[i].first;
+			d_y = pe * sin(phi_list[i]) * delta_t + sqrt(2 * delta_t) * xi_y + delta_t * f[i].second;
 
 			phi_list[i] = positive_mod(phi_list[i] + d_phi, 2 * pi);
 			x_list[i] = positive_mod(x_list[i] + d_x, L);
@@ -395,8 +399,9 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 			msd_value += x_displacement[i] * x_displacement[i] + y_displacement[i] * y_displacement[i];
 			msad_value += phi_displacement[i] * phi_displacement[i];
 		}
-		if ( (t) % 10000 == 0) {
-			off_snap << (t)*delta_t << " ";
+		double t_off = t * delta_t;
+		if (t_off == 0.01 or t_off == 0.1 or t_off == 1 or t % 500000 ==0 ) {
+			off_snap << t_off << " ";
 			for (int i = 0; i < N; i++) {
 				off_snap << x_list[i] << " " << y_list[i] << " " << phi_list[i] << " ";
 			}
@@ -404,8 +409,8 @@ void integrator_interactions(const std::vector<double>& x_values, const std::vec
 		}
 
 		// here output the msd
-		if (t % 1000 == 0) {
-			off_msd << t * delta_t << " " << msd_value / N << " " << msad_value / N << "\n";
+		if (t % 1 == 0) {
+			off_msd << t_off << " " << msd_value / N << " " << msad_value / N << "\n";
 		}	
 	}
 }
